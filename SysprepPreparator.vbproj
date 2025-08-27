@@ -56,6 +56,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -80,6 +81,7 @@
     <Compile Include="Classes\CompatibilityCheckerProviderStatus.vb" />
     <Compile Include="Classes\StatusMessage.vb" />
     <Compile Include="Classes\SysprepConfig.vb" />
+    <Compile Include="Helpers\CompatChecks\ActiveDirectoryDomainJoinCCP.vb" />
     <Compile Include="Helpers\CompatChecks\CompatibilityCheckerProvider.vb" />
     <Compile Include="Helpers\CompatChecks\DismThirdPartyDriverCCP.vb" />
     <Compile Include="Helpers\CompatChecks\PendingServicingOperationsCCP.vb" />

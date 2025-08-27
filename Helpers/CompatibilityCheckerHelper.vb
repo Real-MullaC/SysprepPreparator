@@ -16,7 +16,8 @@ Namespace Helpers
         Private CompatibilityCheckerModules As New List(Of CompatibilityCheckerProvider) From {
             New SetupStateCCP(),
             New PendingServicingOperationsCCP(),
-            New DismThirdPartyDriverCCP()
+            New DismThirdPartyDriverCCP(),
+            New ActiveDirectoryDomainJoinCCP()
         }
 
         ''' <summary>
