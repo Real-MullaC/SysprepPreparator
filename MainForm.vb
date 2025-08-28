@@ -88,6 +88,9 @@ Public Class MainForm
         RaiseEvent TaskReported(task)
     End Sub
 
+    Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
+    Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
+
     ''' <summary>
     ''' Changes the wizard page
     ''' </summary>
@@ -282,6 +285,8 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        OriginalWindowState = WindowState
+        OriginalWindowBounds = Bounds
         FormBorderStyle = FormBorderStyle.None
         WindowState = FormWindowState.Maximized
         ChangePage(WizardPage.Page.WelcomePage)
@@ -330,5 +335,27 @@ Public Class MainForm
 
     Private Sub FinishPage_RestartBtn_Click(sender As Object, e As EventArgs) Handles FinishPage_RestartBtn.Click
         Process.Start("shutdown", "-r -t 00")
+    End Sub
+
+    Private Sub MainForm_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode = Keys.F11 Then
+            ToggleFullScreenMode()
+        End If
+    End Sub
+
+    Sub ToggleFullScreenMode()
+        If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
+            DynaLog.LogMessage("Exiting full-screen mode...")
+            FormBorderStyle = Windows.Forms.FormBorderStyle.Sizable
+            Bounds = OriginalWindowBounds
+            WindowState = OriginalWindowState
+        Else
+            DynaLog.LogMessage("Entering full-screen mode...")
+            FormBorderStyle = Windows.Forms.FormBorderStyle.None
+            OriginalWindowState = WindowState
+            WindowState = FormWindowState.Normal
+            OriginalWindowBounds = Bounds
+            Bounds = Screen.FromControl(Me).Bounds
+        End If
     End Sub
 End Class
