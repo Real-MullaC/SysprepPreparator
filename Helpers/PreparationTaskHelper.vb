@@ -29,11 +29,14 @@ Namespace Helpers
         ''' <returns>All the success events</returns>
         ''' <remarks></remarks>
         Public Function RunTasks() As List(Of Boolean)
+            DynaLog.LogMessage("Preparing to run Preparation Tasks (PTs)...")
             Dim StatusList As New List(Of Boolean)
 
             For Each PreparationTaskModule In PreparationTaskModules.Keys
                 MainForm.ReportTaskStart(PreparationTaskModule)
+                DynaLog.LogMessage("PT to run: " & PreparationTaskModules(PreparationTaskModule).GetType().Name)
                 Dim result As Boolean = PreparationTaskModules(PreparationTaskModule).RunPreparationTask()
+                DynaLog.LogMessage("PT Succeeded? " & result)
                 StatusList.Add(result)
                 MainForm.ReportTaskSuccess(New Dictionary(Of String, Boolean) From {{PreparationTaskModule, result}})
                 Threading.Thread.Sleep(100)

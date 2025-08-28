@@ -114,6 +114,13 @@ Namespace Helpers.PreparationTasks
         ''' if you experience path issues on the external program
         ''' </remarks>
         Public Function RunProcess(FileName As String, Optional Arguments As String = "", Optional WorkingDirectory As String = "", Optional HideWindow As Boolean = False) As Integer Implements IProcessRunner.RunProcess
+            DynaLog.LogMessage("Running external process...")
+            DynaLog.LogMessage(String.Format("{0} {1}", FileName, Arguments))
+            DynaLog.LogMessage("- Working Directory: " & If(WorkingDirectory <> "", WorkingDirectory, "get from process directory"))
+            DynaLog.LogMessage("- Attempt to hide windows the process creates? " & If(HideWindow, "Yes", "No"))
+
+            Dim result As Integer = 0
+
             Try
                 Dim Proc As New Process() With {
                     .StartInfo = New ProcessStartInfo() With {
@@ -127,10 +134,15 @@ Namespace Helpers.PreparationTasks
 
                 Proc.Start()
                 Proc.WaitForExit()
-                Return Proc.ExitCode
+                result = Proc.ExitCode
             Catch ex As Exception
-                Return ex.HResult
+                DynaLog.LogMessage("Something happened with the process. Error Message: " & ex.Message)
+
+                result = ex.HResult
             End Try
+
+            DynaLog.LogMessage("Exit code: " & Hex(result))
+            Return result
         End Function
 
         ''' <summary>

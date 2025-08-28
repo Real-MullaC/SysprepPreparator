@@ -15,6 +15,7 @@ Namespace Helpers.PreparationTasks
         ''' <returns>Whether the process succeeded</returns>
         ''' <remarks></remarks>
         Public Overrides Function RunPreparationTask() As Boolean
+            DynaLog.LogMessage("Running Disk Cleanup...")
             Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cleanmgr.exe"),
                               "/sagerun:1") = PROC_SUCCESS
         End Function

@@ -15,6 +15,7 @@ Namespace Helpers.PreparationTasks
         ''' <returns>Whether the process succeeded</returns>
         ''' <remarks>This will not run when in test mode</remarks>
         Public Overrides Function RunPreparationTask() As Boolean
+            DynaLog.LogMessage("Clearing shadow volumes/restore points...")
             If IsInTestMode Then Return True
             Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "vssadmin.exe"),
                               "delete shadows /all /quiet", HideWindow:=True) = PROC_SUCCESS

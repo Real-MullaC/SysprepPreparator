@@ -69,17 +69,24 @@ Namespace Helpers.CompatChecks
         ''' <returns>An event detailing results</returns>
         ''' <remarks></remarks>
         Public Overrides Function PerformCompatibilityCheck() As Classes.CompatibilityCheckerProviderStatus
+            DynaLog.LogMessage("Detecting if the system is in an appropriate setup state...")
+
             Dim StateRK As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State", False)
             Dim StateValue As String = StateRK.GetValue("ImageState")
+            DynaLog.LogMessage("State Value in Registry: " & StateValue)
             Dim State As ImageState = StringToImageState(StateValue)
             StateRK.Close()
 
+            DynaLog.LogMessage("State enum value: " & State)
+
             If {ImageState.GeneralizeResealToAudit, ImageState.SpecializeResealToAudit}.Contains(State) Then
+                DynaLog.LogMessage("Reseals to audits were detected. We are in a good setup state.")
                 Status.Compatible = True
                 Status.StatusMessage = New Classes.StatusMessage("System Setup State",
                                                                         "The system is in a compatible setup state.",
                                                                         Classes.StatusMessage.StatusMessageSeverity.Info)
             Else
+                DynaLog.LogMessage("Reseals to audits were not detected. We are not in a good setup state.")
                 Status.Compatible = False
                 Status.StatusMessage = New Classes.StatusMessage("System Setup State",
                                                                         "The system is not in a compatible setup state.",
@@ -97,6 +104,8 @@ Namespace Helpers.CompatChecks
         ''' <returns>The enumeration value</returns>
         ''' <remarks></remarks>
         Private Function StringToImageState(ImageState As String) As ImageState
+            DynaLog.LogMessage("Converting the string value to an image state enum value...")
+            DynaLog.LogMessage("- State: " & ImageState)
             Select Case ImageState
                 Case "IMAGE_STATE_COMPLETE"
                     Return SetupStateCCP.ImageState.Complete

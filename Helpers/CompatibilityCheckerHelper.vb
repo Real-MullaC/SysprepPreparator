@@ -26,11 +26,13 @@ Namespace Helpers
         ''' <returns>All the status events logged</returns>
         ''' <remarks></remarks>
         Public Function RunChecks() As List(Of CompatibilityCheckerProviderStatus)
+            DynaLog.LogMessage("Preparing to run Compatibility Checker Providers (CCPs)...")
             Dim StatusList As New List(Of CompatibilityCheckerProviderStatus)
 
             For Each CompatibilityCheckerModule In CompatibilityCheckerModules
+                DynaLog.LogMessage("CCP to run: " & CompatibilityCheckerModule.GetType().Name)
                 Dim result As CompatibilityCheckerProviderStatus = CompatibilityCheckerModule.PerformCompatibilityCheck()
-                Debug.WriteLine(String.Format("[{0}] {1}", CompatibilityCheckerModule.GetType().Name, result.ToString()))
+                DynaLog.LogMessage(String.Format("[{0}] {1}", CompatibilityCheckerModule.GetType().Name, result.ToString()))
                 StatusList.Add(result)
             Next
 

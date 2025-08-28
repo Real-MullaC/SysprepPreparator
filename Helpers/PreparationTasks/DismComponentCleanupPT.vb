@@ -16,6 +16,7 @@ Namespace Helpers.PreparationTasks
         ''' <remarks>This will not launch when in test mode</remarks>
         Public Overrides Function RunPreparationTask() As Boolean
             If IsInTestMode Then Return True
+            DynaLog.LogMessage("Running DISM Component Cleanup...")
             Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "dism.exe"),
                               "/online /cleanup-image /startcomponentcleanup /resetbase") = PROC_SUCCESS
         End Function
