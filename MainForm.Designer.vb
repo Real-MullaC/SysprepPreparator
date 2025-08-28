@@ -32,6 +32,7 @@ Partial Class MainForm
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PageContainerPanel = New System.Windows.Forms.Panel()
         Me.FinishPanel = New System.Windows.Forms.Panel()
+        Me.FinishPage_RestartBtn = New System.Windows.Forms.Button()
         Me.FinishPage_ResysprepBtn = New System.Windows.Forms.Button()
         Me.FinishPage_CloseBtn = New System.Windows.Forms.Button()
         Me.FinishPage_Description = New System.Windows.Forms.Label()
@@ -191,6 +192,7 @@ Partial Class MainForm
         '
         'FinishPanel
         '
+        Me.FinishPanel.Controls.Add(Me.FinishPage_RestartBtn)
         Me.FinishPanel.Controls.Add(Me.FinishPage_ResysprepBtn)
         Me.FinishPanel.Controls.Add(Me.FinishPage_CloseBtn)
         Me.FinishPanel.Controls.Add(Me.FinishPage_Description)
@@ -201,6 +203,17 @@ Partial Class MainForm
         Me.FinishPanel.Size = New System.Drawing.Size(664, 513)
         Me.FinishPanel.TabIndex = 4
         Me.FinishPanel.Visible = False
+        '
+        'FinishPage_RestartBtn
+        '
+        Me.FinishPage_RestartBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
+        Me.FinishPage_RestartBtn.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FinishPage_RestartBtn.Location = New System.Drawing.Point(133, 368)
+        Me.FinishPage_RestartBtn.Name = "FinishPage_RestartBtn"
+        Me.FinishPage_RestartBtn.Size = New System.Drawing.Size(192, 48)
+        Me.FinishPage_RestartBtn.TabIndex = 2
+        Me.FinishPage_RestartBtn.Text = "Restart PC"
+        Me.FinishPage_RestartBtn.UseVisualStyleBackColor = True
         '
         'FinishPage_ResysprepBtn
         '
@@ -267,6 +280,7 @@ Partial Class MainForm
         Me.SettingPreparationPanel_TaskLv.Enabled = False
         Me.SettingPreparationPanel_TaskLv.FullRowSelect = True
         Me.SettingPreparationPanel_TaskLv.GridLines = True
+        Me.SettingPreparationPanel_TaskLv.HideSelection = False
         Me.SettingPreparationPanel_TaskLv.Location = New System.Drawing.Point(18, 187)
         Me.SettingPreparationPanel_TaskLv.MultiSelect = False
         Me.SettingPreparationPanel_TaskLv.Name = "SettingPreparationPanel_TaskLv"
@@ -304,7 +318,7 @@ Partial Class MainForm
         Me.SettingPreparationPage_Description.Name = "SettingPreparationPage_Description"
         Me.SettingPreparationPage_Description.Size = New System.Drawing.Size(633, 44)
         Me.SettingPreparationPage_Description.TabIndex = 1
-        Me.SettingPreparationPage_Description.Text = "Please wait while we prepare your computer for Sysprep. This will take some time." & _
+        Me.SettingPreparationPage_Description.Text = "Please wait while we prepare your computer for Sysprep. This will take some time." &
     ""
         '
         'SettingPreparationPage_Header
@@ -476,7 +490,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_Description.Name = "AdvSettingsPage_Description"
         Me.AdvSettingsPage_Description.Size = New System.Drawing.Size(633, 44)
         Me.AdvSettingsPage_Description.TabIndex = 1
-        Me.AdvSettingsPage_Description.Text = "You can specify additional options for the Sysprep utility. Normally, you don't n" & _
+        Me.AdvSettingsPage_Description.Text = "You can specify additional options for the Sysprep utility. Normally, you don't n" &
     "eed to configure advanced settings."
         '
         'AdvSettingsPage_Header
@@ -613,6 +627,7 @@ Partial Class MainForm
         Me.SysCheckPage_ChecksLv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.SysCheckPage_CheckCH, Me.SysCheckPage_CompatibleCH, Me.SysCheckPage_SeverityCH})
         Me.SysCheckPage_ChecksLv.FullRowSelect = True
         Me.SysCheckPage_ChecksLv.GridLines = True
+        Me.SysCheckPage_ChecksLv.HideSelection = False
         Me.SysCheckPage_ChecksLv.Location = New System.Drawing.Point(20, 112)
         Me.SysCheckPage_ChecksLv.MultiSelect = False
         Me.SysCheckPage_ChecksLv.Name = "SysCheckPage_ChecksLv"
@@ -646,8 +661,8 @@ Partial Class MainForm
         Me.SysCheckPage_Description.Name = "SysCheckPage_Description"
         Me.SysCheckPage_Description.Size = New System.Drawing.Size(633, 44)
         Me.SysCheckPage_Description.TabIndex = 1
-        Me.SysCheckPage_Description.Text = "We are performing some checks on your computer to determine if it is ready for im" & _
-    "age capture. This will take a couple of moments, after which you'll see results " & _
+        Me.SysCheckPage_Description.Text = "We are performing some checks on your computer to determine if it is ready for im" &
+    "age capture. This will take a couple of moments, after which you'll see results " &
     "below:"
         '
         'SysCheckPage_Header
@@ -682,7 +697,7 @@ Partial Class MainForm
         Me.WelcomePage_Description.Name = "WelcomePage_Description"
         Me.WelcomePage_Description.Size = New System.Drawing.Size(633, 269)
         Me.WelcomePage_Description.TabIndex = 1
-        Me.WelcomePage_Description.Text = "This wizard helps you prepare this computer for image capture. To begin, click Ne" & _
+        Me.WelcomePage_Description.Text = "This wizard helps you prepare this computer for image capture. To begin, click Ne" &
     "xt."
         '
         'WelcomePage_Header
@@ -792,6 +807,7 @@ Partial Class MainForm
     Friend WithEvents FinishPage_Description As System.Windows.Forms.Label
     Friend WithEvents FinishPage_Header As System.Windows.Forms.Label
     Friend WithEvents FinishPage_ResysprepBtn As System.Windows.Forms.Button
+    Friend WithEvents FinishPage_RestartBtn As System.Windows.Forms.Button
     Friend WithEvents FinishPage_CloseBtn As System.Windows.Forms.Button
 
 End Class

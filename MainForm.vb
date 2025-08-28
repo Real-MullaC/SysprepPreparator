@@ -325,4 +325,8 @@ Public Class MainForm
     Private Sub FinishPage_ResysprepBtn_Click(sender As Object, e As EventArgs) Handles FinishPage_ResysprepBtn.Click
         SysprepComputer()
     End Sub
+
+    Private Sub FinishPage_RestartBtn_Click(sender As Object, e As EventArgs) Handles FinishPage_RestartBtn.Click
+        Process.Start("shutdown", "-r -t 00")
+    End Sub
 End Class
