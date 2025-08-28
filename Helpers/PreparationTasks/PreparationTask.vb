@@ -12,7 +12,7 @@ Namespace Helpers.PreparationTasks
     ''' and inherit this base class. More information can be found in the documentation
     ''' </remarks>
     Public MustInherit Class PreparationTask
-        Implements IUserInterfaceInterop, IProcessRunner
+        Implements IUserInterfaceInterop, IProcessRunner, IRegistryRunner
 
         ''' <summary>
         ''' Runs a preparation task
@@ -97,6 +97,9 @@ Namespace Helpers.PreparationTasks
             MessageBox.Show(Message, Caption, MessageBoxButtons.OK)
         End Sub
 
+        Const DTERR_RegNotFound As Integer = 2
+        Const DTERR_RegItemObjectNull As Integer = 1
+
         ''' <summary>
         ''' Starts an external process
         ''' </summary>
@@ -130,7 +133,123 @@ Namespace Helpers.PreparationTasks
             End Try
         End Function
 
+        ''' <summary>
+        ''' Runs a REG process
+        ''' </summary>
+        ''' <param name="CommandLine">The command line arguments to pass to the REG program</param>
+        ''' <returns>The exit code of REG process</returns>
+        ''' <remarks></remarks>
+        Public Function RunRegProcess(CommandLine As String) As Integer Implements IRegistryRunner.RunRegProcess
+            DynaLog.LogMessage("Running REG process...")
+            DynaLog.LogMessage("- Command-line Arguments: " & CommandLine)
+            DynaLog.LogMessage("Checking presence of REG program...")
+            If Not File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe")) Then
+                DynaLog.LogMessage("REG is not found. Aborting this procedure!")
+                Return DTERR_RegNotFound
+            End If
+            DynaLog.LogMessage("REG found. Running...")
+            Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "reg.exe"),
+                              CommandLine,
+                              HideWindow:=Debugger.IsAttached)
+        End Function
 
+        ''' <summary>
+        ''' Gets an appropriate representation of registry value types for REG commands
+        ''' </summary>
+        ''' <param name="ValueType">The registry value type</param>
+        ''' <returns>The representation for REG commands</returns>
+        ''' <remarks></remarks>
+        Public Function GetRegValueTypeFromEnum(ValueType As RegistryItem.ValueType) As String Implements IRegistryRunner.GetRegValueTypeFromEnum
+            Select Case ValueType
+                Case RegistryItem.ValueType.RegNone
+                    Return "REG_NONE"
+                Case RegistryItem.ValueType.RegSz
+                    Return "REG_SZ"
+                Case RegistryItem.ValueType.RegExpandSz
+                    Return "REG_EXPAND_SZ"
+                Case RegistryItem.ValueType.RegMultiSz
+                    Return "REG_MULTI_SZ"
+                Case RegistryItem.ValueType.RegBinary
+                    Return "REG_BINARY"
+                Case RegistryItem.ValueType.RegDword
+                    Return "REG_DWORD"
+                Case RegistryItem.ValueType.RegQword
+                    Return "REG_QWORD"
+            End Select
+            Return ""
+        End Function
+
+        ''' <summary>
+        ''' Adds a registry item to the system
+        ''' </summary>
+        ''' <param name="RegItem">The new registry item</param>
+        ''' <returns>The exit code of the underlying REG process call</returns>
+        ''' <remarks></remarks>
+        Public Function AddRegistryItem(RegItem As RegistryItem) As Integer Implements IRegistryRunner.AddRegistryItem
+            If RegItem Is Nothing Then Return DTERR_RegItemObjectNull
+
+            DynaLog.LogMessage("Adding registry item " & RegItem.ToString())
+
+            Return RunRegProcess(String.Format("add {0} {1} /t {2} /d {3} /f",
+                                               RegItem.RegistryKeyLocation,
+                                               If(String.IsNullOrEmpty(RegItem.RegistryValueName),
+                                                  "/ve",
+                                                  String.Format("/v {0}",
+                                                                RegItem.RegistryValueName)),
+                                               GetRegValueTypeFromEnum(RegItem.RegistryValueType),
+                                               RegItem.RegistryValueData))
+        End Function
+
+        ''' <summary>
+        ''' Removes a registry item from the system
+        ''' </summary>
+        ''' <param name="RegPath">The absolute path to the item (key or value)</param>
+        ''' <param name="DeletionArgs">Deletion arguments to pass to REG</param>
+        ''' <returns>The exit code of the underlying REG process call</returns>
+        ''' <remarks></remarks>
+        Public Function RemoveRegistryItem(RegPath As String, DeletionArgs As String) As Integer Implements IRegistryRunner.RemoveRegistryItem
+            If String.IsNullOrEmpty(RegPath) Then Return DTERR_RegItemObjectNull
+            If String.IsNullOrEmpty(DeletionArgs) Then Return DTERR_RegItemObjectNull
+
+            DynaLog.LogMessage(String.Format("Removing registry item {0} with provided REG argument {1}", RegPath, DeletionArgs))
+
+            Return RunRegProcess(String.Format("delete {0} {1}",
+                                               ControlChars.Quote & RegPath & ControlChars.Quote,
+                                               DeletionArgs))
+        End Function
+
+        ''' <summary>
+        ''' Loads a registry hive to the system
+        ''' </summary>
+        ''' <param name="RegHivePath">The path of the registry hive</param>
+        ''' <param name="RegMountPath">The path to mount the registry hive to</param>
+        ''' <returns>The exit code of the underlying REG process call</returns>
+        ''' <remarks></remarks>
+        Public Function LoadRegistryHive(RegHivePath As String, RegMountPath As String) As Integer Implements IRegistryRunner.LoadRegistryHive
+            If String.IsNullOrEmpty(RegHivePath) Then Return DTERR_RegItemObjectNull
+            If String.IsNullOrEmpty(RegMountPath) Then Return DTERR_RegItemObjectNull
+
+            DynaLog.LogMessage(String.Format("Loading registry hive {0} to path {1}", RegHivePath, RegMountPath))
+
+            Return RunRegProcess(String.Format("load {0} {1}",
+                                               RegMountPath,
+                                               ControlChars.Quote & RegHivePath & ControlChars.Quote))
+        End Function
+
+        ''' <summary>
+        ''' Unloads a registry hive from the system
+        ''' </summary>
+        ''' <param name="RegMountPath">The path of the mounted hive to unload</param>
+        ''' <returns>The exit code of the underlying REG process call</returns>
+        ''' <remarks></remarks>
+        Public Function UnloadRegistryHive(RegMountPath As String) As Integer Implements IRegistryRunner.UnloadRegistryHive
+            If String.IsNullOrEmpty(RegMountPath) Then Return DTERR_RegItemObjectNull
+
+            DynaLog.LogMessage(String.Format("Unloading registry hive {0}", RegMountPath))
+
+            Return RunRegProcess(String.Format("unload {0}",
+                                               RegMountPath))
+        End Function
     End Class
 
 End Namespace
