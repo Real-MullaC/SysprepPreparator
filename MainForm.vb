@@ -282,6 +282,8 @@ Public Class MainForm
     End Sub
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        FormBorderStyle = FormBorderStyle.None
+        WindowState = FormWindowState.Maximized
         ChangePage(WizardPage.Page.WelcomePage)
         InitializeSettings()
         AddHandler AdvSettingsPage_CleanupActionCBox.SelectedIndexChanged, AddressOf ChangeSysprepConfiguration

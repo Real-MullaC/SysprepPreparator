@@ -85,6 +85,13 @@ Namespace Helpers.CompatChecks
                 Status.StatusMessage = New Classes.StatusMessage("System Setup State",
                                                                         "The system is in a compatible setup state.",
                                                                         Classes.StatusMessage.StatusMessageSeverity.Info)
+
+            ElseIf State = ImageState.SpecializeResealToOOBE Then
+                Status.Compatible = False
+                Status.StatusMessage = New Classes.StatusMessage("System Setup State",
+                                                                        "The system is not in a compatible setup state.",
+                                                                        "Please launch command prompt as admin and run the following command - ```sysprep /generalize```",
+                                                                        Classes.StatusMessage.StatusMessageSeverity.Warning)
             Else
                 DynaLog.LogMessage("Reseals to audits were not detected. We are not in a good setup state.")
                 Status.Compatible = False
