@@ -327,6 +327,6 @@ Public Class MainForm
     End Sub
 
     Private Sub FinishPage_RestartBtn_Click(sender As Object, e As EventArgs) Handles FinishPage_RestartBtn.Click
-        System.Diagnostics.Process.Start("shutdown", "-r -t 00")
+        Process.Start("shutdown", "-r -t 00")
     End Sub
 End Class
