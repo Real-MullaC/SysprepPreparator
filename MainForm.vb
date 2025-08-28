@@ -346,7 +346,7 @@ Public Class MainForm
     Sub ToggleFullScreenMode()
         If FormBorderStyle = Windows.Forms.FormBorderStyle.None Then
             DynaLog.LogMessage("Exiting full-screen mode...")
-            FormBorderStyle = Windows.Forms.FormBorderStyle.Sizable
+            FormBorderStyle = Windows.Forms.FormBorderStyle.FixedSingle
             Bounds = OriginalWindowBounds
             WindowState = OriginalWindowState
         Else
