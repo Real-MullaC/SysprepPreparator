@@ -16,37 +16,6 @@ Public Class DynaLog
     ''' <remarks>This can be called by any function/method</remarks>
     Public Shared Property LoggerEnabled As Boolean = True
 
-    ''' <summary>
-    ''' Checks the age of the active DynaLog log file
-    ''' </summary>
-    ''' <remarks>If a DynaLog log file is older than 2 weeks, it will be archived</remarks>
-    Public Shared Sub CheckLogAge()
-        LogMessage("Checking existing logs...", False)
-        If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
-            LogMessage("Log File Found. Checking log file creation date...", False)
-            Try
-                Dim CreationDate As DateTime = File.GetCreationTimeUtc(Application.StartupPath & "\logs\DT_DynaLog.log")
-                If CreationDate < DateTime.UtcNow.AddDays(-14) Then
-                    LogMessage("Current log file is more than 2 weeks old. Archiving...", False)
-                    Dim ArchivedFileName As String = "DT_DynaLog_" & DateTime.UtcNow.ToString("yyMMdd-HHmm") & ".old"
-                    Try
-                        File.Move(Application.StartupPath & "\logs\DT_DynaLog.log", Application.StartupPath & "\logs\" & ArchivedFileName)
-                        LogMessage("The old log file has been archived. New messages will be shown in a new log file", False)       ' A blank sheet of... logs?
-                        File.SetCreationTimeUtc(Application.StartupPath & "\logs\DT_DynaLog.log", Date.UtcNow)
-                    Catch ex As Exception
-                        LogMessage("Could not archive log. Error info:" & CrLf & CrLf & ex.ToString(), False)
-                    End Try
-                Else
-                    ' Don't archive
-                End If
-            Catch ex As Exception
-                LogMessage("Could not check log file age. Error info:" & CrLf & CrLf & ex.ToString(), False)
-            End Try
-        Else
-            ' Don't do anything
-        End If
-    End Sub
-
     Public Shared Sub BeginLogging()
         LogMessage("DynaLog Logger has begun logging program operations...", False)
         LogMessage("--- Time Stamps are shown in UTC Time!!! ---", False)
@@ -88,12 +57,12 @@ Public Class DynaLog
                 Directory.CreateDirectory(Application.StartupPath & "\logs")
             End If
             Dim FileLength As Long = 0
-            If File.Exists(Application.StartupPath & "\logs\DT_DynaLog.log") Then
-                FileLength = New FileInfo(Application.StartupPath & "\logs\DT_DynaLog.log").Length
+            If File.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SysprepPrepTool_DynaLog.log") Then
+                FileLength = New FileInfo(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SysprepPrepTool_DynaLog.log").Length
             End If
             Dim MessagePrefix As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture) & "] [PID " & Process.GetCurrentProcess().Id & "] [" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] "
             Dim MessageLine As String = MessagePrefix & message.Replace(CrLf, CrLf & MessagePrefix).Trim()
-            File.AppendAllText(Application.StartupPath & "\logs\DT_DynaLog.log", If(FileLength > 0, CrLf, "") & MessageLine)
+            File.AppendAllText(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SysprepPrepTool_DynaLog.log", If(FileLength > 0, CrLf, "") & MessageLine)
         Catch ex As Exception
             Debug.WriteLine("DynaLog logging could not log this operation. Error:" & CrLf & CrLf & ex.ToString())
         End Try
