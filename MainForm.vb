@@ -2,6 +2,7 @@
 Imports SysprepPreparator.Classes
 Imports Microsoft.VisualBasic.ControlChars
 Imports System.IO
+Imports Microsoft.Win32
 
 Public Class MainForm
 
@@ -91,6 +92,8 @@ Public Class MainForm
     Dim OriginalWindowBounds As Rectangle           ' Window bounds before full-screen
     Dim OriginalWindowState As FormWindowState      ' Window state before full-screen
 
+    Dim currentTheme As Theme
+
     ''' <summary>
     ''' Changes the wizard page
     ''' </summary>
@@ -128,6 +131,34 @@ Public Class MainForm
             PrepareComputer()
         ElseIf NewPage = WizardPage.Page.FinishPage Then
             SysprepComputer()
+        End If
+    End Sub
+
+    Sub ChangeTheme()
+        ThemeHelper.LoadThemes()
+
+        Dim ColorModeRk As RegistryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", False)
+        Dim ColorModeVal As Integer = ColorModeRk.GetValue("AppsUseLightTheme", 1)
+        ColorModeRk.Close()
+
+        currentTheme = ThemeHelper.GetThemes().FirstOrDefault(Function(Theme) Theme.IsDark = (ColorModeVal = 0))
+
+        If currentTheme IsNot Nothing Then
+            BackColor = currentTheme.BackgroundColor
+            ForeColor = currentTheme.ForegroundColor
+            PageContainerPanel.BackColor = currentTheme.SectionBackgroundColor
+            ButtonPanel.BackColor = currentTheme.BackgroundColor
+            SysCheckPage_CheckDetailsGB.ForeColor = currentTheme.ForegroundColor
+            SysCheckPage_ChecksLv.BackColor = currentTheme.SectionBackgroundColor
+            SysCheckPage_ChecksLv.ForeColor = currentTheme.ForegroundColor
+            AdvSettingsPage_CleanupActionCBox.BackColor = currentTheme.SectionBackgroundColor
+            AdvSettingsPage_CleanupActionCBox.ForeColor = currentTheme.ForegroundColor
+            AdvSettingsPage_ShutdownOptionsCBox.BackColor = currentTheme.SectionBackgroundColor
+            AdvSettingsPage_ShutdownOptionsCBox.ForeColor = currentTheme.ForegroundColor
+            AdvSettingsPage_SysprepUnatt_AnswerFileText.BackColor = currentTheme.SectionBackgroundColor
+            AdvSettingsPage_SysprepUnatt_AnswerFileText.ForeColor = currentTheme.ForegroundColor
+            SettingPreparationPanel_TaskLv.BackColor = currentTheme.SectionBackgroundColor
+            SettingPreparationPanel_TaskLv.ForeColor = currentTheme.ForegroundColor
         End If
     End Sub
 
@@ -296,6 +327,7 @@ Public Class MainForm
         AddHandler AdvSettingsPage_ShutdownOptionsCBox.SelectedIndexChanged, AddressOf ChangeSysprepConfiguration
         AddHandler AdvSettingsPage_SysprepUnatt_AnswerFileText.TextChanged, AddressOf ChangeSysprepConfiguration
         AddHandler AdvSettingsPage_VMMode.CheckedChanged, AddressOf ChangeSysprepConfiguration
+        ChangeTheme()
     End Sub
 
     Private Sub SysCheckPage_ChecksLv_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SysCheckPage_ChecksLv.SelectedIndexChanged

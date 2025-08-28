@@ -352,7 +352,6 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SysCheckPage_ChecksLv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.SysCheckPage_CheckCH, Me.SysCheckPage_CompatibleCH, Me.SysCheckPage_SeverityCH})
         Me.SysCheckPage_ChecksLv.FullRowSelect = True
-        Me.SysCheckPage_ChecksLv.GridLines = True
         Me.SysCheckPage_ChecksLv.HideSelection = False
         Me.SysCheckPage_ChecksLv.Location = New System.Drawing.Point(20, 112)
         Me.SysCheckPage_ChecksLv.MultiSelect = False
@@ -610,9 +609,8 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SettingPreparationPanel_TaskLv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.SettingPreparationPage_TaskCH, Me.SettingPreparationPage_SuccessfulCH})
-        Me.SettingPreparationPanel_TaskLv.Enabled = False
         Me.SettingPreparationPanel_TaskLv.FullRowSelect = True
-        Me.SettingPreparationPanel_TaskLv.GridLines = True
+        Me.SettingPreparationPanel_TaskLv.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
         Me.SettingPreparationPanel_TaskLv.HideSelection = False
         Me.SettingPreparationPanel_TaskLv.Location = New System.Drawing.Point(18, 187)
         Me.SettingPreparationPanel_TaskLv.MultiSelect = False
