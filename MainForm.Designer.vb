@@ -178,11 +178,11 @@ Partial Class MainForm
         'PageContainerPanel
         '
         Me.PageContainerPanel.BackColor = System.Drawing.Color.WhiteSmoke
-        Me.PageContainerPanel.Controls.Add(Me.FinishPanel)
-        Me.PageContainerPanel.Controls.Add(Me.SettingPreparationPanel)
-        Me.PageContainerPanel.Controls.Add(Me.AdvSettingsPanel)
-        Me.PageContainerPanel.Controls.Add(Me.SystemCheckPanel)
         Me.PageContainerPanel.Controls.Add(Me.WelcomePage)
+        Me.PageContainerPanel.Controls.Add(Me.SystemCheckPanel)
+        Me.PageContainerPanel.Controls.Add(Me.AdvSettingsPanel)
+        Me.PageContainerPanel.Controls.Add(Me.SettingPreparationPanel)
+        Me.PageContainerPanel.Controls.Add(Me.FinishPanel)
         Me.PageContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PageContainerPanel.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.PageContainerPanel.Location = New System.Drawing.Point(120, 0)
@@ -206,9 +206,10 @@ Partial Class MainForm
         '
         'FinishPage_RestartBtn
         '
+        Me.FinishPage_RestartBtn.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.FinishPage_RestartBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.FinishPage_RestartBtn.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FinishPage_RestartBtn.Location = New System.Drawing.Point(133, 368)
+        Me.FinishPage_RestartBtn.Location = New System.Drawing.Point(434, 312)
         Me.FinishPage_RestartBtn.Name = "FinishPage_RestartBtn"
         Me.FinishPage_RestartBtn.Size = New System.Drawing.Size(192, 48)
         Me.FinishPage_RestartBtn.TabIndex = 2
@@ -217,9 +218,10 @@ Partial Class MainForm
         '
         'FinishPage_ResysprepBtn
         '
+        Me.FinishPage_ResysprepBtn.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.FinishPage_ResysprepBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.FinishPage_ResysprepBtn.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FinishPage_ResysprepBtn.Location = New System.Drawing.Point(340, 312)
+        Me.FinishPage_ResysprepBtn.Location = New System.Drawing.Point(236, 312)
         Me.FinishPage_ResysprepBtn.Name = "FinishPage_ResysprepBtn"
         Me.FinishPage_ResysprepBtn.Size = New System.Drawing.Size(192, 48)
         Me.FinishPage_ResysprepBtn.TabIndex = 2
@@ -228,9 +230,10 @@ Partial Class MainForm
         '
         'FinishPage_CloseBtn
         '
+        Me.FinishPage_CloseBtn.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.FinishPage_CloseBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.FinishPage_CloseBtn.Font = New System.Drawing.Font("Segoe UI", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FinishPage_CloseBtn.Location = New System.Drawing.Point(133, 312)
+        Me.FinishPage_CloseBtn.Location = New System.Drawing.Point(38, 312)
         Me.FinishPage_CloseBtn.Name = "FinishPage_CloseBtn"
         Me.FinishPage_CloseBtn.Size = New System.Drawing.Size(192, 48)
         Me.FinishPage_CloseBtn.TabIndex = 2
@@ -276,6 +279,9 @@ Partial Class MainForm
         '
         'SettingPreparationPanel_TaskLv
         '
+        Me.SettingPreparationPanel_TaskLv.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SettingPreparationPanel_TaskLv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.SettingPreparationPage_TaskCH, Me.SettingPreparationPage_SuccessfulCH})
         Me.SettingPreparationPanel_TaskLv.Enabled = False
         Me.SettingPreparationPanel_TaskLv.FullRowSelect = True
@@ -301,6 +307,8 @@ Partial Class MainForm
         '
         'SettingPreparationPage_ProgressLabel
         '
+        Me.SettingPreparationPage_ProgressLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SettingPreparationPage_ProgressLabel.AutoEllipsis = True
         Me.SettingPreparationPage_ProgressLabel.Location = New System.Drawing.Point(17, 124)
         Me.SettingPreparationPage_ProgressLabel.Name = "SettingPreparationPage_ProgressLabel"
@@ -318,7 +326,7 @@ Partial Class MainForm
         Me.SettingPreparationPage_Description.Name = "SettingPreparationPage_Description"
         Me.SettingPreparationPage_Description.Size = New System.Drawing.Size(633, 44)
         Me.SettingPreparationPage_Description.TabIndex = 1
-        Me.SettingPreparationPage_Description.Text = "Please wait while we prepare your computer for Sysprep. This will take some time." &
+        Me.SettingPreparationPage_Description.Text = "Please wait while we prepare your computer for Sysprep. This will take some time." & _
     ""
         '
         'SettingPreparationPage_Header
@@ -349,6 +357,9 @@ Partial Class MainForm
         '
         'AdvSettingsPage_SysprepPrepToolDeploySteps
         '
+        Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps.AutoEllipsis = True
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Location = New System.Drawing.Point(20, 312)
         Me.AdvSettingsPage_SysprepPrepToolDeploySteps.Name = "AdvSettingsPage_SysprepPrepToolDeploySteps"
@@ -358,6 +369,8 @@ Partial Class MainForm
         '
         'AdvSettingsPage_SysprepConfigPanel
         '
+        Me.AdvSettingsPage_SysprepConfigPanel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_VMModeExplanationLink)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_VMMode)
         Me.AdvSettingsPage_SysprepConfigPanel.Controls.Add(Me.AdvSettingsPage_SysprepUnatt_Btn)
@@ -388,16 +401,20 @@ Partial Class MainForm
         '
         'AdvSettingsPage_VMMode
         '
-        Me.AdvSettingsPage_VMMode.AutoSize = True
+        Me.AdvSettingsPage_VMMode.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AdvSettingsPage_VMMode.AutoCheck = False
+        Me.AdvSettingsPage_VMMode.AutoEllipsis = True
         Me.AdvSettingsPage_VMMode.Location = New System.Drawing.Point(23, 105)
         Me.AdvSettingsPage_VMMode.Name = "AdvSettingsPage_VMMode"
-        Me.AdvSettingsPage_VMMode.Size = New System.Drawing.Size(465, 19)
+        Me.AdvSettingsPage_VMMode.Size = New System.Drawing.Size(564, 19)
         Me.AdvSettingsPage_VMMode.TabIndex = 6
         Me.AdvSettingsPage_VMMode.Text = "VM Mode: Generalize the system to be deployed as a VHD on the same VM solution"
         Me.AdvSettingsPage_VMMode.UseVisualStyleBackColor = True
         '
         'AdvSettingsPage_SysprepUnatt_Btn
         '
+        Me.AdvSettingsPage_SysprepUnatt_Btn.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_SysprepUnatt_Btn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.AdvSettingsPage_SysprepUnatt_Btn.Location = New System.Drawing.Point(471, 72)
         Me.AdvSettingsPage_SysprepUnatt_Btn.Name = "AdvSettingsPage_SysprepUnatt_Btn"
@@ -408,6 +425,8 @@ Partial Class MainForm
         '
         'AdvSettingsPage_SysprepUnatt_AnswerFileText
         '
+        Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Location = New System.Drawing.Point(130, 72)
         Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Name = "AdvSettingsPage_SysprepUnatt_AnswerFileText"
         Me.AdvSettingsPage_SysprepUnatt_AnswerFileText.Size = New System.Drawing.Size(335, 23)
@@ -424,18 +443,21 @@ Partial Class MainForm
         '
         'AdvSettingsPage_CleanupAction_Generalize
         '
-        Me.AdvSettingsPage_CleanupAction_Generalize.AutoSize = True
+        Me.AdvSettingsPage_CleanupAction_Generalize.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.AdvSettingsPage_CleanupAction_Generalize.AutoEllipsis = True
         Me.AdvSettingsPage_CleanupAction_Generalize.Checked = True
         Me.AdvSettingsPage_CleanupAction_Generalize.CheckState = System.Windows.Forms.CheckState.Checked
         Me.AdvSettingsPage_CleanupAction_Generalize.Location = New System.Drawing.Point(473, 16)
         Me.AdvSettingsPage_CleanupAction_Generalize.Name = "AdvSettingsPage_CleanupAction_Generalize"
-        Me.AdvSettingsPage_CleanupAction_Generalize.Size = New System.Drawing.Size(80, 19)
+        Me.AdvSettingsPage_CleanupAction_Generalize.Size = New System.Drawing.Size(114, 19)
         Me.AdvSettingsPage_CleanupAction_Generalize.TabIndex = 2
         Me.AdvSettingsPage_CleanupAction_Generalize.Text = "Generalize"
         Me.AdvSettingsPage_CleanupAction_Generalize.UseVisualStyleBackColor = True
         '
         'AdvSettingsPage_ShutdownOptionsCBox
         '
+        Me.AdvSettingsPage_ShutdownOptionsCBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_ShutdownOptionsCBox.FormattingEnabled = True
         Me.AdvSettingsPage_ShutdownOptionsCBox.Items.AddRange(New Object() {"Restart", "Shut Down", "Exit"})
         Me.AdvSettingsPage_ShutdownOptionsCBox.Location = New System.Drawing.Point(130, 43)
@@ -445,6 +467,8 @@ Partial Class MainForm
         '
         'AdvSettingsPage_CleanupActionCBox
         '
+        Me.AdvSettingsPage_CleanupActionCBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AdvSettingsPage_CleanupActionCBox.FormattingEnabled = True
         Me.AdvSettingsPage_CleanupActionCBox.Items.AddRange(New Object() {"Enter System OOBE", "Enter System Audit Mode"})
         Me.AdvSettingsPage_CleanupActionCBox.Location = New System.Drawing.Point(130, 14)
@@ -490,7 +514,7 @@ Partial Class MainForm
         Me.AdvSettingsPage_Description.Name = "AdvSettingsPage_Description"
         Me.AdvSettingsPage_Description.Size = New System.Drawing.Size(633, 44)
         Me.AdvSettingsPage_Description.TabIndex = 1
-        Me.AdvSettingsPage_Description.Text = "You can specify additional options for the Sysprep utility. Normally, you don't n" &
+        Me.AdvSettingsPage_Description.Text = "You can specify additional options for the Sysprep utility. Normally, you don't n" & _
     "eed to configure advanced settings."
         '
         'AdvSettingsPage_Header
@@ -521,6 +545,7 @@ Partial Class MainForm
         '
         'SysCheckPage_CheckAgainBtn
         '
+        Me.SysCheckPage_CheckAgainBtn.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SysCheckPage_CheckAgainBtn.FlatStyle = System.Windows.Forms.FlatStyle.System
         Me.SysCheckPage_CheckAgainBtn.Location = New System.Drawing.Point(529, 482)
         Me.SysCheckPage_CheckAgainBtn.Name = "SysCheckPage_CheckAgainBtn"
@@ -531,6 +556,8 @@ Partial Class MainForm
         '
         'SysCheckPage_CheckDetailsGB
         '
+        Me.SysCheckPage_CheckDetailsGB.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SysCheckPage_CheckDetailsGB.Controls.Add(Me.SysCheckPage_CheckDetailsTLP)
         Me.SysCheckPage_CheckDetailsGB.Location = New System.Drawing.Point(20, 293)
         Me.SysCheckPage_CheckDetailsGB.Name = "SysCheckPage_CheckDetailsGB"
@@ -624,6 +651,9 @@ Partial Class MainForm
         '
         'SysCheckPage_ChecksLv
         '
+        Me.SysCheckPage_ChecksLv.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SysCheckPage_ChecksLv.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.SysCheckPage_CheckCH, Me.SysCheckPage_CompatibleCH, Me.SysCheckPage_SeverityCH})
         Me.SysCheckPage_ChecksLv.FullRowSelect = True
         Me.SysCheckPage_ChecksLv.GridLines = True
@@ -639,7 +669,7 @@ Partial Class MainForm
         'SysCheckPage_CheckCH
         '
         Me.SysCheckPage_CheckCH.Text = "Check"
-        Me.SysCheckPage_CheckCH.Width = 384
+        Me.SysCheckPage_CheckCH.Width = 376
         '
         'SysCheckPage_CompatibleCH
         '
@@ -661,8 +691,8 @@ Partial Class MainForm
         Me.SysCheckPage_Description.Name = "SysCheckPage_Description"
         Me.SysCheckPage_Description.Size = New System.Drawing.Size(633, 44)
         Me.SysCheckPage_Description.TabIndex = 1
-        Me.SysCheckPage_Description.Text = "We are performing some checks on your computer to determine if it is ready for im" &
-    "age capture. This will take a couple of moments, after which you'll see results " &
+        Me.SysCheckPage_Description.Text = "We are performing some checks on your computer to determine if it is ready for im" & _
+    "age capture. This will take a couple of moments, after which you'll see results " & _
     "below:"
         '
         'SysCheckPage_Header
@@ -697,7 +727,7 @@ Partial Class MainForm
         Me.WelcomePage_Description.Name = "WelcomePage_Description"
         Me.WelcomePage_Description.Size = New System.Drawing.Size(633, 269)
         Me.WelcomePage_Description.TabIndex = 1
-        Me.WelcomePage_Description.Text = "This wizard helps you prepare this computer for image capture. To begin, click Ne" &
+        Me.WelcomePage_Description.Text = "This wizard helps you prepare this computer for image capture. To begin, click Ne" & _
     "xt."
         '
         'WelcomePage_Header
