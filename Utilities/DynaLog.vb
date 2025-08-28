@@ -57,12 +57,12 @@ Public Class DynaLog
                 Directory.CreateDirectory(Application.StartupPath & "\logs")
             End If
             Dim FileLength As Long = 0
-            If File.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SysprepPrepTool_DynaLog.log") Then
-                FileLength = New FileInfo(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SysprepPrepTool_DynaLog.log").Length
+            If File.Exists(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SP_DynaLog.log") Then
+                FileLength = New FileInfo(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SP_DynaLog.log").Length
             End If
             Dim MessagePrefix As String = "[" & Date.UtcNow.ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture) & "] [PID " & Process.GetCurrentProcess().Id & "] [" & New StackFrame(1).GetMethod().Name & If(GetParentCaller, " (" & New StackFrame(2).GetMethod().Name & ")", "") & "] "
             Dim MessageLine As String = MessagePrefix & message.Replace(CrLf, CrLf & MessagePrefix).Trim()
-            File.AppendAllText(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SysprepPrepTool_DynaLog.log", If(FileLength > 0, CrLf, "") & MessageLine)
+            File.AppendAllText(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.Windows)) & "\SP_DynaLog.log", If(FileLength > 0, CrLf, "") & MessageLine)
         Catch ex As Exception
             Debug.WriteLine("DynaLog logging could not log this operation. Error:" & CrLf & CrLf & ex.ToString())
         End Try
