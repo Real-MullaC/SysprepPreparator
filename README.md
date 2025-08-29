@@ -6,7 +6,7 @@ The Sysprep preparation tool prepares computers for Sysprep generalization and f
 
 This tool is designed to be as modular as possible. Checks are performed by *Compatibility Checker Providers* (CCPs). Tasks are performed by *Preparation Tasks* (PTs).
 
-Special Thanks to @Real-MullaC for helping with initial testing and expansion of this tool.
+*Special Thanks to [Real-MullaC](https://github.com/Real-MullaC) for helping with initial testing and expansion of this tool.*
 
 ## How do I get started?
 
