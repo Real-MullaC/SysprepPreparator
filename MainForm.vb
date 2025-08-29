@@ -328,6 +328,7 @@ Public Class MainForm
         AddHandler AdvSettingsPage_SysprepUnatt_AnswerFileText.TextChanged, AddressOf ChangeSysprepConfiguration
         AddHandler AdvSettingsPage_VMMode.CheckedChanged, AddressOf ChangeSysprepConfiguration
         ChangeTheme()
+        FinishPage_CloseBtn.Enabled = Environment.GetCommandLineArgs().Contains("/test")
     End Sub
 
     Private Sub SysCheckPage_ChecksLv_SelectedIndexChanged(sender As Object, e As EventArgs) Handles SysCheckPage_ChecksLv.SelectedIndexChanged
