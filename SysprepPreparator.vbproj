@@ -81,10 +81,17 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Classes\CompatibilityCheckerProviderStatus.vb" />
     <Compile Include="Classes\RegistryItem.vb" />
     <Compile Include="Classes\StatusMessage.vb" />
     <Compile Include="Classes\SysprepConfig.vb" />
+    <Compile Include="ErrorDialog.Designer.vb">
+      <DependentUpon>ErrorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="ErrorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Helpers\CompatChecks\ActiveDirectoryDomainJoinCCP.vb" />
     <Compile Include="Helpers\CompatChecks\CompatibilityCheckerProvider.vb" />
     <Compile Include="Helpers\CompatChecks\DismThirdPartyDriverCCP.vb" />
@@ -131,6 +138,9 @@
     <Compile Include="WizardPage.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ErrorDialog.resx">
+      <DependentUpon>ErrorDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
       <SubType>Designer</SubType>
