@@ -18,10 +18,10 @@ jobs:
         uses: NuGet/setup-nuget@v2
 
       - name: Restore NuGet packages
-        run: nuget restore SysprepPreperator.sln
+        run: nuget restore SysprepPreparator.sln
 
       - name: Build Solution
-        run: msbuild SysprepPreperator.sln /t:Build /p:Configuration=Release
+        run: msbuild SysprepPreparator.sln /t:Build /p:Configuration=Release
 
       - name: Get latest tag
         id: get_tag
@@ -59,17 +59,17 @@ jobs:
         run: |
           $exe = Get-ChildItem -Path . -Recurse -Filter "Sysprep Preperator.exe" | Where-Object { $_.FullName -match "bin\\Release" } | Select-Object -First 1
           if ($exe) {
-            $newExe = "$($exe.DirectoryName)\\Sysprep_Preperator_v${env:version}.exe"
+            $newExe = "$($exe.DirectoryName)\\SysprepPreparator_v${env:version}.exe"
             Rename-Item $exe.FullName $newExe -Force
             echo "EXE_PATH=$newExe" >> $env:GITHUB_ENV
           } else {
-            Write-Error "Could not find Sysprep Preperator.exe in bin\\Release"
+            Write-Error "Could not find Sysprep Preparator.exe in bin\\Release"
           }
 
       - name: Upload EXE Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Sysprep_Preperator_v${{ env.version }}
+          name: SysprepPreparator_v${{ env.version }}
           path: ${{ env.EXE_PATH }}
           if-no-files-found: error
 
@@ -77,7 +77,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.version }}
-          name: "Sysprep Preperator v${{ env.version }}"
+          name: "Sysprep Preparator v${{ env.version }}"
           body: ${{ env.notes }}
           files: ${{ env.EXE_PATH }}
         env:
