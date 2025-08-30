@@ -15,11 +15,21 @@ Namespace Helpers.PreparationTasks
         ''' <returns>Whether the process succeeded</returns>
         ''' <remarks>This will not launch when in test mode</remarks>
         Public Overrides Function RunPreparationTask() As Boolean
-            ' TODO: Implement a more .NET-native version
             DynaLog.LogMessage("Clearing the Recycle Bin of the current user...")
             If IsInTestMode Then Return True
-            Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "WindowsPowerShell", "v1.0", "powershell.exe"),
-                              "-Command Clear-RecycleBin -Force")
+            Try
+                For Each drive As DriveInfo In DriveInfo.GetDrives().Where(Function(driveInList) driveInList.IsReady).ToList()
+                    Dim recycleBinPath As String = Path.Combine(drive.RootDirectory.FullName, "$Recycle.Bin", GetUserSid(Environment.GetEnvironmentVariable("USERNAME")))
+                    Try
+                        RemoveRecursive(recycleBinPath)
+                    Catch ex As Exception
+                        Continue For
+                    End Try
+                Next
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
         End Function
     End Class
 
