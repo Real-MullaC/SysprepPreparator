@@ -1,4 +1,4 @@
-name: Manual Build & Release Sysprep Preperator
+name: Manual Build & Release Sysprep Preparator
 
 on:
   workflow_dispatch:
@@ -22,40 +22,31 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore SysprepPreparator.sln
 
-      - name: Build Solution
+      - name: Build Solution & Save EXE in Root
         shell: pwsh
         run: |
           # Build solution
           msbuild SysprepPreparator.sln /t:Build /p:Configuration=Release
 
-          # Find the EXE by the exact name
+          # Find the EXE from build output
           $exe = Get-ChildItem -Path . -Recurse -Include "SysprepPreparator.exe" | Select-Object -First 1
+          if (-not $exe) { Write-Error "Could not find SysprepPreparator.exe"; exit 1 }
 
-          if ($exe) {
-              # Copy EXE to repo root
-              $dest = "$PWD\SysprepPreparator.exe"
-              Copy-Item "$($exe.FullName)" $dest -Force
-              echo "EXE_PATH=$dest" >> $env:GITHUB_ENV
-              Write-Host "EXE copied to repo root: $dest"
-          } else {
-              Write-Warning "Could not find SysprepPreparator.exe. Check build output path."
-              exit 1
-          }
-
-
+          # Copy to root
+          $dest = "$PWD\SysprepPreparator.exe"
+          Copy-Item $exe.FullName $dest -Force
+          echo "EXE_PATH=$dest" >> $env:GITHUB_ENV
+          Write-Host "EXE copied to repo root: $dest"
 
       - name: Get latest tag
         id: get_tag
         shell: pwsh
         run: |
-          # Check if any tags exist
           $tags = git tag
           if ($tags) {
               $latestTag = git describe --tags --abbrev=0
-              Write-Host "Latest tag found: $latestTag"
           } else {
               $latestTag = "v0.0"
-              Write-Host " No tags found, starting fresh at v0.1"
           }
           echo "latest_tag=$latestTag" >> $env:GITHUB_ENV
 
@@ -63,55 +54,40 @@ jobs:
         id: version
         shell: pwsh
         run: |
-          $ver = $env:latest_tag.TrimStart("v")
-          $parts = $ver.Split('.')
-          $major = [int]$parts[0]
-          $minor = [int]$parts[1]
-
-          if ($ver -eq "0.0") {
+          if ($env:latest_tag -eq "v0.0") {
             $newVersion = "0.1"
           } else {
-            $minor += 1
+            $ver = $env:latest_tag.TrimStart("v")
+            $parts = $ver.Split('.')
+            $major = [int]$parts[0]
+            $minor = [int]$parts[1] + 1
             $newVersion = "$major.$minor"
           }
-
           echo "version=$newVersion" >> $env:GITHUB_ENV
           Write-Host "Next version: v$newVersion"
-
 
       - name: Generate Release Notes
         id: notes
         shell: pwsh
         run: |
           if ($env:latest_tag -eq "v0.0") {
-            # First release → include all commits
             $commits = git log --pretty=format:"* %s (%h)"
           } else {
-            # Subsequent releases → commits since last tag
             $commits = git log $env:latest_tag..HEAD --pretty=format:"* %s (%h)"
           }
-
           if (-not $commits) { $commits = "Initial release" }
+          # Force newlines
+          $commits = $commits -replace "`r?`n", "`n"
           echo "notes=$commits" >> $env:GITHUB_ENV
 
-
-      - name: Rename EXE
+      - name: Rename EXE to include version
         shell: pwsh
         run: |
-          # Search recursively for EXE in bin\Release folders
-          $exe = Get-ChildItem -Path . -Recurse -Include "SysprepPreperator.exe" |
-                Where-Object { $_.FullName -match "bin\\Release" } |
-                Select-Object -First 1
-
-          if ($exe) {
-            $newExe = "$($exe.DirectoryName)\SysprepPreperator_v${env:version}.exe"
-            Rename-Item $exe.FullName $newExe -Force
-            echo "EXE_PATH=$newExe" >> $env:GITHUB_ENV
-            Write-Host "EXE found and renamed: $newExe"
-          } else {
-            Write-Warning "Could not find SysprepPreperator.exe. Check MSBuild output path and project name."
-          }
-
+          $exePath = $env:EXE_PATH
+          $newExe = "./SysprepPreparator_v${env:version}.exe"
+          Rename-Item $exePath $newExe -Force
+          echo "EXE_PATH=$newExe" >> $env:GITHUB_ENV
+          Write-Host "EXE renamed for release: $newExe"
 
       - name: Upload EXE Artifact
         uses: actions/upload-artifact@v4
@@ -124,7 +100,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ env.version }}
-          name: "SysprepPreparator v${{ env.version }}"
+          name: "Sysprep Preparator v${{ env.version }}"
           body: ${{ env.notes }}
           files: ${{ env.EXE_PATH }}
         env:
