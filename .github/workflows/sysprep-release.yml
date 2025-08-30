@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
@@ -63,14 +63,15 @@ jobs:
             Rename-Item $exe.FullName $newExe -Force
             echo "EXE_PATH=$newExe" >> $env:GITHUB_ENV
           } else {
-            Write-Error "❌ Could not find Sysprep Preperator.exe in bin\\Release"
+            Write-Error "Could not find Sysprep Preperator.exe in bin\\Release"
           }
 
       - name: Upload EXE Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Sysprep_Preperator_v${{ env.version }}
           path: ${{ env.EXE_PATH }}
+          if-no-files-found: error
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
