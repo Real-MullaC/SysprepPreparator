@@ -270,7 +270,8 @@ Namespace Helpers.PreparationTasks
                 Try
                     Directory.Delete(DirectoryToDelete, True)
                 Catch ex As Exception
-                    Return False
+                    Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
+                                      "/c del " & Quote & DirectoryToDelete & Quote & " /F /S /Q", HideWindow:=True) = PROC_SUCCESS
                 End Try
             End If
             Return True
