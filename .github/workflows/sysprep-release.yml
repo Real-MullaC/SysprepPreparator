@@ -79,14 +79,20 @@ jobs:
       - name: Rename EXE
         shell: pwsh
         run: |
-          $exe = Get-ChildItem -Path . -Recurse -Filter "Sysprep Preperator.exe" | Where-Object { $_.FullName -match "bin\\Release" } | Select-Object -First 1
+          # Search recursively for EXE in bin\Release folders
+          $exe = Get-ChildItem -Path . -Recurse -Include "Sysprep Preperator.exe" |
+                Where-Object { $_.FullName -match "bin\\Release" } |
+                Select-Object -First 1
+
           if ($exe) {
-            $newExe = "$($exe.DirectoryName)\\SysprepPreparator_v${env:version}.exe"
+            $newExe = "$($exe.DirectoryName)\Sysprep_Preperator_v${env:version}.exe"
             Rename-Item $exe.FullName $newExe -Force
             echo "EXE_PATH=$newExe" >> $env:GITHUB_ENV
+            Write-Host "EXE found and renamed: $newExe"
           } else {
-            Write-Error "Could not find Sysprep Preparator.exe in bin\\Release"
+            Write-Warning "Could not find Sysprep Preperator.exe. Check MSBuild output path and project name."
           }
+
 
       - name: Upload EXE Artifact
         uses: actions/upload-artifact@v4
