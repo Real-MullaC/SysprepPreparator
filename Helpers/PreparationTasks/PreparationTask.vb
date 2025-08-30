@@ -265,7 +265,12 @@ Namespace Helpers.PreparationTasks
                                                RegMountPath))
         End Function
 
+        Private Function IsRootPath(FolderPath As String) As Boolean
+            Return Path.GetPathRoot(FolderPath) = FolderPath
+        End Function
+
         Public Function RemoveRecursive(DirectoryToDelete As String) As Boolean Implements IFileProcessor.RemoveRecursive
+            If IsRootPath(DirectoryToDelete) Then Return False
             If Directory.Exists(DirectoryToDelete) Then
                 Try
                     Directory.Delete(DirectoryToDelete, True)
