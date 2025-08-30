@@ -70,15 +70,20 @@ jobs:
         id: notes
         shell: pwsh
         run: |
+          $file = "$PWD\release_notes.txt"
+
           if ($env:latest_tag -eq "v0.0") {
-            $commits = git log --pretty=format:"* %s (%h)"
+              git log --pretty=format:"* %s (%h)" > $file
           } else {
-            $commits = git log $env:latest_tag..HEAD --pretty=format:"* %s (%h)"
+              git log $env:latest_tag..HEAD --pretty=format:"* %s (%h)" > $file
           }
-          if (-not $commits) { $commits = "Initial release" }
-          # Force newlines
-          $commits = $commits -replace "`r?`n", "`n"
-          echo "notes=$commits" >> $env:GITHUB_ENV
+
+          if ((Get-Content $file).Length -eq 0) {
+              Set-Content -Path $file -Value "Initial release"
+          }
+
+          echo "RELEASE_NOTES_FILE=$file" >> $env:GITHUB_ENV
+
 
       - name: Rename EXE to include version
         shell: pwsh
@@ -101,7 +106,8 @@ jobs:
         with:
           tag_name: v${{ env.version }}
           name: "Sysprep Preparator v${{ env.version }}"
-          body: ${{ env.notes }}
+          body_path: ${{ env.RELEASE_NOTES_FILE }}
           files: ${{ env.EXE_PATH }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
