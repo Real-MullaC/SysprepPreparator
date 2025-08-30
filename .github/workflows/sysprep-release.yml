@@ -23,7 +23,24 @@ jobs:
         run: nuget restore SysprepPreparator.sln
 
       - name: Build Solution
-        run: msbuild SysprepPreparator.sln /t:Build /p:Configuration=Release
+        shell: pwsh
+        run: |
+          # Build the solution in Release mode
+          msbuild SysprepPreparator.sln /t:Build /p:Configuration=Release
+
+          # Find the EXE in the output folder
+          $exe = Get-ChildItem -Path . -Recurse -Include "Sysprep Preparator.exe" | Select-Object -First 1
+
+          if ($exe) {
+              # Copy and rename the EXE to the repo root
+              $dest = "$PWD\Sysprep Preperator.exe"
+              Copy-Item "$($exe.FullName)" $dest -Force
+              Write-Host "EXE saved to repo root: $dest"
+          } else {
+              Write-Warning "Could not find Sysprep Preparator.exe. Check build output path."
+              exit 1
+          }
+
 
       - name: Get latest tag
         id: get_tag
