@@ -64,12 +64,17 @@ jobs:
         id: notes
         shell: pwsh
         run: |
-          # Get all commits since the last release
-          $commits = git log $env:latest_tag..HEAD --pretty=format:"* %s (%h)"
-          if (-not $commits) {
-            $commits = "No changes since last release."
+          if ($env:latest_tag -eq "v0.0") {
+            # First release → include all commits
+            $commits = git log --pretty=format:"* %s (%h)"
+          } else {
+            # Subsequent releases → commits since last tag
+            $commits = git log $env:latest_tag..HEAD --pretty=format:"* %s (%h)"
           }
+
+          if (-not $commits) { $commits = "Initial release" }
           echo "notes=$commits" >> $env:GITHUB_ENV
+
 
       - name: Rename EXE
         shell: pwsh
