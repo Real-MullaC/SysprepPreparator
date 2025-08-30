@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
@@ -27,9 +29,14 @@ jobs:
         id: get_tag
         shell: pwsh
         run: |
-          $latestTag = (git describe --tags --abbrev=0) 2>$null
-          if (-not $latestTag) { $latestTag = "v0.1" }
-          echo "latest_tag=$latestTag" >> $env:GITHUB_ENV
+          try {
+            $tag = (git describe --tags --abbrev=1)
+            echo "latest_tag=$tag" >> $env:GITHUB_ENV
+            Write-Host "Latest tag found: $tag"
+          } catch {
+            echo "latest_tag=v0.1" >> $env:GITHUB_ENV
+            Write-Host "No tags found, starting at v0.1"
+          }
 
       - name: Calculate next version
         id: version
