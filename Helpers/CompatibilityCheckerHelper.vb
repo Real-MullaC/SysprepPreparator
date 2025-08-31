@@ -17,7 +17,8 @@ Namespace Helpers
             New SetupStateCCP(),
             New PendingServicingOperationsCCP(),
             New DismThirdPartyDriverCCP(),
-            New ActiveDirectoryDomainJoinCCP()
+            New ActiveDirectoryDomainJoinCCP(),
+            New ThirdPartyAppxCCP()
         }
 
         ''' <summary>
