@@ -71,35 +71,45 @@ Namespace Helpers.CompatChecks
         Public Overrides Function PerformCompatibilityCheck() As Classes.CompatibilityCheckerProviderStatus
             DynaLog.LogMessage("Detecting if the system is in an appropriate setup state...")
 
-            Dim StateRK As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State", False)
-            Dim StateValue As String = StateRK.GetValue("ImageState")
-            DynaLog.LogMessage("State Value in Registry: " & StateValue)
-            Dim State As ImageState = StringToImageState(StateValue)
-            StateRK.Close()
+            Try
+                Dim StateRK As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State", False)
+                Dim StateValue As String = StateRK.GetValue("ImageState")
+                DynaLog.LogMessage("State Value in Registry: " & StateValue)
+                Dim State As ImageState = StringToImageState(StateValue)
+                StateRK.Close()
 
-            DynaLog.LogMessage("State enum value: " & State)
+                DynaLog.LogMessage("State enum value: " & State)
 
-            If {ImageState.GeneralizeResealToAudit, ImageState.SpecializeResealToAudit}.Contains(State) Then
-                DynaLog.LogMessage("Reseals to audits were detected. We are in a good setup state.")
-                Status.Compatible = True
-                Status.StatusMessage = New Classes.StatusMessage("System Setup State",
-                                                                        "The system is in a compatible setup state.",
-                                                                        Classes.StatusMessage.StatusMessageSeverity.Info)
+                If {ImageState.GeneralizeResealToAudit, ImageState.SpecializeResealToAudit}.Contains(State) Then
+                    DynaLog.LogMessage("Reseals to audits were detected. We are in a good setup state.")
+                    Status.Compatible = True
+                    Status.StatusMessage = New Classes.StatusMessage("System Setup State",
+                                                                            "The system is in a compatible setup state.",
+                                                                            Classes.StatusMessage.StatusMessageSeverity.Info)
 
-            ElseIf State = ImageState.SpecializeResealToOOBE Then
+                ElseIf State = ImageState.SpecializeResealToOOBE Then
+                    DynaLog.LogMessage("Reseals to audits were not detected. We are not in a good setup state.")
+                    Status.Compatible = False
+                    Status.StatusMessage = New Classes.StatusMessage("System Setup State",
+                                                                            "The system is not in a compatible setup state.",
+                                                                            "Please launch command prompt as admin and run the following command - ```sysprep /generalize```",
+                                                                            Classes.StatusMessage.StatusMessageSeverity.Warning)
+                Else
+                    DynaLog.LogMessage("Reseals to audits were not detected. We are not in a good setup state.")
+                    Status.Compatible = False
+                    Status.StatusMessage = New Classes.StatusMessage("System Setup State",
+                                                                            "The system is not in a compatible setup state.",
+                                                                            "Please restart your computer in Audit mode. You may need to reinstall Windows if you finished the OOBE.",
+                                                                            Classes.StatusMessage.StatusMessageSeverity.Critical)
+                End If
+            Catch ex As Exception
+                DynaLog.LogMessage("An error occurred. Message: " & ex.Message)
                 Status.Compatible = False
                 Status.StatusMessage = New Classes.StatusMessage("System Setup State",
-                                                                        "The system is not in a compatible setup state.",
-                                                                        "Please launch command prompt as admin and run the following command - ```sysprep /generalize```",
-                                                                        Classes.StatusMessage.StatusMessageSeverity.Warning)
-            Else
-                DynaLog.LogMessage("Reseals to audits were not detected. We are not in a good setup state.")
-                Status.Compatible = False
-                Status.StatusMessage = New Classes.StatusMessage("System Setup State",
-                                                                        "The system is not in a compatible setup state.",
-                                                                        "Please restart your computer in Audit mode. You may need to reinstall Windows if you finished the OOBE.",
+                                                                        "An error occurred when getting information about setup states: " & ex.Message,
+                                                                        "Please report this issue to the developers.",
                                                                         Classes.StatusMessage.StatusMessageSeverity.Critical)
-            End If
+            End Try
 
             Return Status
         End Function

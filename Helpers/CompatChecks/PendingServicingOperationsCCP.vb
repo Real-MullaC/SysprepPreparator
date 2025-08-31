@@ -42,48 +42,56 @@ Namespace Helpers.CompatChecks
             DynaLog.LogMessage("Proceeding with Session Manager value checking. Temporary files from app installs are most likely going to be caught")
 
             ' 1. Pending File Rename Operations
-            Dim NTSMRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Session Manager", False)
-            Dim PFROValue As String() = NTSMRk.GetValue("PendingFileRenameOperations", New String() {})
-            NTSMRk.Close()
-            DynaLog.LogMessage("Pending File Rename Operations: " & PFROValue.Count)
-            If PFROValue.Count > 0 Then
-                DynaLog.LogMessage("There are some files in there.")
-                ' A reboot is required to rename files that were in use
-                Status.Compatible = True
-                Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
-                                                                 "Some applications need you to restart your computer to clear up temporary files. You can continue, but it is best that you restart.",
-                                                                 "Please restart your computer for these operations to be done.",
-                                                                 Classes.StatusMessage.StatusMessageSeverity.Info)
-                Return Status
-            End If
-            DynaLog.LogMessage("There aren't any files in there.")
+            Try
+                Dim NTSMRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SYSTEM\CurrentControlSet\Control\Session Manager", False)
+                Dim PFROValue As String() = NTSMRk.GetValue("PendingFileRenameOperations", New String() {})
+                NTSMRk.Close()
+                DynaLog.LogMessage("Pending File Rename Operations: " & PFROValue.Count)
+                If PFROValue.Count > 0 Then
+                    DynaLog.LogMessage("There are some files in there.")
+                    ' A reboot is required to rename files that were in use
+                    Status.Compatible = True
+                    Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
+                                                                     "Some applications need you to restart your computer to clear up temporary files. You can continue, but it is best that you restart.",
+                                                                     "Please restart your computer for these operations to be done.",
+                                                                     Classes.StatusMessage.StatusMessageSeverity.Info)
+                    Return Status
+                End If
+                DynaLog.LogMessage("There aren't any files in there.")
+            Catch ex As Exception
+                DynaLog.LogMessage("An error occurred. Message: " & ex.Message)
+            End Try
 
             DynaLog.LogMessage("Proceeding with CBS value. This is less likely to pick any things because pending.xml is more likely to be found")
 
             ' 2. CBS
-            Dim CBSRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
-            Dim RPValue As Integer = CBSRk.GetValue("RebootPending", 0)
-            CBSRk.Close()
-            DynaLog.LogMessage("RebootPending Value: " & RPValue)
-            If RPValue <> 0 Then
-                ' Windows Updates are still pending
-                DynaLog.LogMessage("Value is not 0.")
-                Status.Compatible = False
+            Try
+                Dim CBSRk As RegistryKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing", False)
+                Dim RPValue As Integer = CBSRk.GetValue("RebootPending", 0)
+                CBSRk.Close()
+                DynaLog.LogMessage("RebootPending Value: " & RPValue)
+                If RPValue <> 0 Then
+                    ' Windows Updates are still pending
+                    DynaLog.LogMessage("Value is not 0.")
+                    Status.Compatible = False
+                    Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
+                                                                     "The system needs to perform some servicing operations before continuing.",
+                                                                     "Please restart your computer for these operations to be done.",
+                                                                     Classes.StatusMessage.StatusMessageSeverity.Warning)
+                    Return Status
+                End If
+                DynaLog.LogMessage("Value is 0.")
+
+                DynaLog.LogMessage("No checks found the indicator. We'll assume everything is alright")
+
+                ' None of our checks failed. We're good to go here!
+                Status.Compatible = True
                 Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
-                                                                 "The system needs to perform some servicing operations before continuing.",
-                                                                 "Please restart your computer for these operations to be done.",
-                                                                 Classes.StatusMessage.StatusMessageSeverity.Warning)
-                Return Status
-            End If
-            DynaLog.LogMessage("Value is 0.")
-
-            DynaLog.LogMessage("No checks found the indicator. We'll assume everything is alright")
-
-            ' None of our checks failed. We're good to go here!
-            Status.Compatible = True
-            Status.StatusMessage = New Classes.StatusMessage("Pending servicing operations",
-                                                             "The system does not need to perform any servicing operations.",
-                                                             Classes.StatusMessage.StatusMessageSeverity.Info)
+                                                                 "The system does not need to perform any servicing operations.",
+                                                                 Classes.StatusMessage.StatusMessageSeverity.Info)
+            Catch ex As Exception
+                DynaLog.LogMessage("An error occurred. Message: " & ex.Message)
+            End Try
 
             Return Status
         End Function
