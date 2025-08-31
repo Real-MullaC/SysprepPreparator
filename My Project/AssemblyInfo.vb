@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("SysprepPreparator")> 
-<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyTitle("Sysprep Preparation Tool")> 
+<Assembly: AssemblyDescription("The Sysprep Prep Tool prepares your computer for sysprep generalization and image capture")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("SysprepPreparator")> 
+<Assembly: AssemblyProduct("Sysprep Preparation Tool")> 
 <Assembly: AssemblyCopyright("© 2025 CodingWonders Software")> 
 <Assembly: AssemblyTrademark("")> 
 
