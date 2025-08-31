@@ -14,6 +14,7 @@ Namespace Helpers
         ''' </summary>
         ''' <remarks>To develop and register a PT, read the documentation</remarks>
         Private PreparationTaskModules As New Dictionary(Of String, PreparationTask) From {
+            {"Stop Running Sysprep processes", New SysprepStopperPT()},
             {"Stop Windows Explorer", New ExplorerStopperPT()},
             {"Delete Shadow Volumes", New VssAdminShadowVolumeDeletePT()},
             {"DISM Component Store Cleanup", New DismComponentCleanupPT()},

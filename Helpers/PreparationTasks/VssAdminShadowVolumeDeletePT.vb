@@ -18,7 +18,7 @@ Namespace Helpers.PreparationTasks
             DynaLog.LogMessage("Clearing shadow volumes/restore points...")
             If IsInTestMode Then Return True
             Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "vssadmin.exe"),
-                              "delete shadows /all /quiet", HideWindow:=True) = PROC_SUCCESS
+                              "delete shadows /all /quiet", HideWindow:=True, Inconditional:=True) = PROC_SUCCESS
         End Function
 
     End Class

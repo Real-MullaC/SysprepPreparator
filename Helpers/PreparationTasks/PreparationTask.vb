@@ -109,17 +109,19 @@ Namespace Helpers.PreparationTasks
         ''' <param name="Arguments">The arguments to pass to the file</param>
         ''' <param name="WorkingDirectory">The directory the program should run on</param>
         ''' <param name="HideWindow">Whether to hide a window, if created by the program</param>
+        ''' <param name="Inconditional">Whether to consider the exit code of the process</param>
         ''' <returns>The exit code of the process</returns>
         ''' <remarks>
         ''' If a working directory is not specified, this function will use the directory the program specified in FileName is located on
         ''' as the working directory. Please consider changing this to a different directory in your Preparation Task
         ''' if you experience path issues on the external program
         ''' </remarks>
-        Public Function RunProcess(FileName As String, Optional Arguments As String = "", Optional WorkingDirectory As String = "", Optional HideWindow As Boolean = False) As Integer Implements IProcessRunner.RunProcess
+        Public Function RunProcess(FileName As String, Optional Arguments As String = "", Optional WorkingDirectory As String = "", Optional HideWindow As Boolean = False, Optional Inconditional As Boolean = False) As Integer Implements IProcessRunner.RunProcess
             DynaLog.LogMessage("Running external process...")
             DynaLog.LogMessage(String.Format("{0} {1}", FileName, Arguments))
             DynaLog.LogMessage("- Working Directory: " & If(WorkingDirectory <> "", WorkingDirectory, "get from process directory"))
             DynaLog.LogMessage("- Attempt to hide windows the process creates? " & If(HideWindow, "Yes", "No"))
+            DynaLog.LogMessage("- Consider process exit code? " & If(Inconditional, "No", "Yes"))
 
             Dim result As Integer = 0
 
@@ -142,6 +144,8 @@ Namespace Helpers.PreparationTasks
 
                 result = ex.HResult
             End Try
+
+            If Inconditional Then result = PROC_SUCCESS
 
             DynaLog.LogMessage("Exit code: " & Hex(result))
             Return result
@@ -276,7 +280,7 @@ Namespace Helpers.PreparationTasks
                     Directory.Delete(DirectoryToDelete, True)
                 Catch ex As Exception
                     Return RunProcess(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "system32", "cmd.exe"),
-                                      "/c del " & Quote & DirectoryToDelete & Quote & " /F /S /Q", HideWindow:=True) = PROC_SUCCESS
+                                      "/c del " & Quote & DirectoryToDelete & Quote & " /F /S /Q", HideWindow:=True, Inconditional:=True) = PROC_SUCCESS
                 End Try
             End If
             Return True
